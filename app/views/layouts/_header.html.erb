@@ -1,0 +1,33 @@
+<header class="navbar navbar-default navbar-fixed-top">
+
+		<div class="container">
+
+			<div class="navbar-header">
+				<%= link_to "ChartUp", root_path, class: 'navbar-brand' %>
+			</div>
+			<nav class="collapse navbar-collapse" role="navigation">
+				<ul class="nav navbar-nav pull-right">
+
+					<li><%= link_to "New Chart", root_path %></li>
+					<li><%= link_to "My Charts", charts_path %></li>
+
+					<% if signed_in? %>
+						<li id='menu' class='dropdown'>
+							<a href='#' class='dropdown-toggle' data-toggle='dropdown'>
+								<%= current_user.email %><b class='caret'></b>
+							</a>
+							<ul class='dropdown-menu'>
+								<li><%= link_to 'Settings', edit_user_registration_path(current_user) %></li>
+								<li class='divider'></li>
+								<li>
+									<%= link_to 'Sign out', sign_out_path, method: 'delete' %>
+								</li>
+							</ul>
+						</li>
+					<% else %>	
+						<li><%= link_to "Sign in (FB)",	user_omniauth_authorize_path(:facebook) %></li>
+					<% end %>
+				</ul>
+			</nav>
+		</div>
+</header>

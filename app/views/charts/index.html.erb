@@ -1,0 +1,7 @@
+<%= "#{current_user.name}'s Charts:" %>
+
+<ul>
+<% current_user.charts.each do |chart| %>
+	<li><%= link_to chart.title, edit_chart_path(chart) %></li>
+	<% end %>
+</ul>

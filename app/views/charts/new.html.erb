@@ -1,0 +1,17 @@
+<div class='container'>
+	<div class='row'>
+		<div class="col-md-6">
+			<%= form_for(@chart) do |f| %>
+			<%= f.label :chartup, @chart.title %>
+			<%= f.text_area :chartup, size: '60x20', class: 'form-control' %>
+
+			<%= f.submit 'Preview', class: 'btn' %>
+			<%= f.submit 'Save', class: 'btn' %>
+			<%= f.submit 'Download PDF', class: 'btn' %>
+			<% end %>
+		</div>
+		<div class="col-md-6">
+			<img />
+		</div>
+	</div>
+</div>
