@@ -1,14 +1,14 @@
 source 'https://rubygems.org'
-#ruby '2.0.0'
+source 'https://***REMOVED***@gem.fury.io/arthurthefourth/'
+
 ruby '2.1.1'
-#gem 'rails', '4.0.4'
 gem 'rails', '4.1.0'
 gem 'sass-rails', '~> 4.0.3'
 
 gem 'sprockets', '2.11.0'
 gem 'bcrypt-ruby', '3.1.2'
 gem 'devise', '3.2.4'
-#gem 'chartup', '0.0.1'
+gem 'chartup', '0.0.1'
 gem 'omniauth-facebook', '1.6.0'
 
 group :development, :test do 

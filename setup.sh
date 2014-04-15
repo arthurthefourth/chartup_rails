@@ -25,8 +25,10 @@ gem install rails --version=4.1
 ssh-keygen -t rsa -C "arthur.lewis@gmail.com"
 eval "$(ssh-agent)"
 ssh-add ~/.ssh/id_rsa
-
+# Make sure to add SSH key to Github
 git clone git@github.com:arthurthefourth/chartup_rails.git
 cd chartup_rails
 bundle install
+RAILS_ENV=production rake db:create db:schema:load
+bundle exec rails server -e production
 
