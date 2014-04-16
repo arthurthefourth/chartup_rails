@@ -1,4 +1,5 @@
 class ChartsController < ApplicationController
+  before_action :authenticate_user!
   def new
     @chart = Chart.new
     @chart.title = 'Untitled'
@@ -9,7 +10,6 @@ class ChartsController < ApplicationController
     chartup = params[:chart][:chartup]
     @chart.title = title_from_chartup(chartup) || 'Untitled'
     @chart.chartup = chartup
-
     if @chart.save
       flash[:notice] = 'Chart created.'
       redirect_to edit_chart_path(@chart)
@@ -29,9 +29,9 @@ class ChartsController < ApplicationController
   def update
     @chart = Chart.find(params[:id])
     chartup = params[:chart][:chartup]
+
     # Check for title
     # (This should probably be delegated to Chartdown parser)
-    
     @chart.title = title_from_chartup(chartup) || @chart.title
     @chart.chartup = chartup
 

@@ -29,6 +29,8 @@ ssh-add ~/.ssh/id_rsa
 git clone git@github.com:arthurthefourth/chartup_rails.git
 cd chartup_rails
 bundle install
+
+mkdir /tmp/fifos
 RAILS_ENV=production rake db:create db:schema:load
 bundle exec rails server -e production
 
