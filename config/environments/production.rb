@@ -77,4 +77,7 @@ ChartupRails::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+
+  # Constants
+  config.lilypond_path = '/usr/local/bin/lilypond'
 end

@@ -1,4 +1,5 @@
 class ChartsController < ApplicationController
+  include ChartHelper
   before_action :authenticate_user!
   def new
     @chart = Chart.new
@@ -53,4 +54,20 @@ class ChartsController < ApplicationController
     end
     title
   end
+
+  def pdf
+    @chart = Chart.find(params[:id])
+    pdf_path = @chart.output_lilypond(:pdf)
+    pdf_name = "#{@chart.title}.pdf"
+    send_file pdf_path, filename: pdf_name, type: 'application/pdf'
+  end
+
+  def png
+    @chart = Chart.find(params[:id])
+    png_path = @chart.output_lilypond(:png)
+    png_name = "#{@chart.title}.png"
+    send_file png_path, filename: png_name, type: 'image/png'
+  end
+
+
 end

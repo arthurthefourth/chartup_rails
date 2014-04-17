@@ -24,5 +24,7 @@ doc/
 .idea
 .secret
 
-public/assets/
+public/assets/application*
+public/assets/manifest*
+/downloads
 .vagrant/
