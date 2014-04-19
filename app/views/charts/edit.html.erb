@@ -1,0 +1,28 @@
+<div class='container'>
+	<div class='row'>
+		<div class="col-md-6">
+
+			<%= form_for(@chart) do |f| %>
+			    <% @chart.errors.full_messages.each do |msg| %>
+			      <p class="alert alert-danger"><%= msg %></p>
+			    <% end %>
+				<div class='form-group'>
+					<%= f.label :title %>
+					<%= f.text_field :title, class: 'form-control', placeholder: 'Untitled' %>
+				</div>
+				<div class='form-group'>
+					<%= f.label 'Chart' %>
+					<%= f.text_area :chartup, size: '60x20', class: 'form-control', value: @chart.chartup_without_title %>
+				</div>
+				<div class='form-group' style="display:block; text-align:center;">
+					<%= f.submit 'Preview', class: 'btn' %>
+					<%= f.submit 'Save', class: 'btn' %>
+					<%= f.submit 'Download PDF', class: 'btn' %>
+				</div>
+			<% end %>
+		</div>
+		<div class="col-md-6">
+			<img />
+		</div>
+	</div>
+</div>

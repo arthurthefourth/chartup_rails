@@ -1,6 +1,10 @@
 class Chart < ActiveRecord::Base
-  # attr_accessor :title, :chartup
+  require 'open3'
+  #attr_accessor :title, :chartup, :composer
+
   belongs_to :user
+  before_validation :set_titles
+
   validates :title, presence: true
   validates :chartup, presence: true
 
@@ -17,4 +21,41 @@ class Chart < ActiveRecord::Base
     "#{filename}.#{format.to_s}"
   end
 
+  def chartup_without_title
+    if chartup
+      chartup.lines.reject {|line| is_title(line)}.map! {|line| line.chomp }.compact.join("\n")
+    else
+      ''
+    end
+  end
+
+  private
+  # Submitted title field overrides title in Chartup document
+  def set_titles
+    # Title was submitted
+    if self.title.empty?
+      self.title = get_title_from_chartup(chartup) || 'Untitled'
+    else
+      set_chartup_title(self.title)
+    end
+  end
+
+  def get_title_from_chartup(chartup)
+    chartup.each_line do |line|
+      if is_title(line)
+        title_line = line.split('title:')[1].strip
+        return title_line
+      end
+    end
+    return nil
+  end
+
+  def set_chartup_title(new_title)
+    self.chartup = ["title: #{new_title}", chartup_without_title].join("\n")
+  end
+
+
+  def is_title(line)
+    line.downcase.start_with? 'title:'
+  end
 end
