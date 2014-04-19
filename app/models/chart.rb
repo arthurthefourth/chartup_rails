@@ -3,7 +3,7 @@ class Chart < ActiveRecord::Base
   #attr_accessor :title, :chartup, :composer
 
   belongs_to :user
-  before_validation :set_titles
+  after_validation :set_titles
 
   validates :title, presence: true
   validates :chartup, presence: true

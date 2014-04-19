@@ -9,7 +9,8 @@ ChartupRails::Application.routes.draw do
 
   get 'charts/:id/pdf', :to => 'charts#pdf', as: :pdf
   get 'charts/:id/png', :to => 'charts#png', as: :png
-
+  get 'downloads/:filename', :to => 'charts#download', as: :download
+  post 'charts/preview', :to => 'charts#preview', as: :preview
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
