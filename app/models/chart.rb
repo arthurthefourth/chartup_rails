@@ -29,6 +29,10 @@ class Chart < ActiveRecord::Base
     end
   end
 
+  def same_chart(other_chart)
+    (self.chartup == other_chart.chartup) && (self.title == other_chart.title)
+  end
+  
   private
   # Submitted title field overrides title in Chartup document
   def set_titles
