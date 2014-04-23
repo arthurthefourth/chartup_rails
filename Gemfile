@@ -10,6 +10,7 @@ gem 'bcrypt-ruby', '3.1.2'
 gem 'devise', '3.2.4'
 gem 'chartup', '0.0.1'
 gem 'omniauth-facebook', '1.6.0'
+gem 'detect_timezone_rails', '0.0.5'
 
 group :development, :test do 
   gem 'sqlite3', '1.3.8'

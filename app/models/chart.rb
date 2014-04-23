@@ -32,7 +32,17 @@ class Chart < ActiveRecord::Base
   def same_chart(other_chart)
     (self.chartup == other_chart.chartup) && (self.title == other_chart.title)
   end
-  
+
+
+  def last_updated
+    time = self.updated_at
+    if time < Time.now - (3600 * 24)
+      time.strftime("%b %-d, %Y")
+    else
+      time.strftime("%l:%M %p")
+    end
+  end
+
   private
   # Submitted title field overrides title in Chartup document
   def set_titles

@@ -14,6 +14,12 @@ class ChartsController < ApplicationController
     render :edit
   end
 
+  def destroy
+    Chart.find(params[:id]).destroy
+    flash[:notice] = 'Chart deleted.'
+    redirect_to charts_path
+  end
+
   def new
     @chart = Chart.new
     @chart.title = 'Untitled'
@@ -47,7 +53,7 @@ class ChartsController < ApplicationController
   def preview
     @chart = Chart.new(chart_params)
     if @chart.valid?
-      png
+      png_url
     else
       render nothing: true
     end
@@ -56,28 +62,28 @@ class ChartsController < ApplicationController
   def download
     @chart = Chart.new(chart_params)
     if @chart.valid?
-      pdf
+      send_pdf
     else
       render nothing: true
     end
   end
 
-  def pdf
+  def png_url
+    png_file = @chart.output_lilypond(:png)
+    render plain: File.join('/downloads', File.basename(png_file))
+  end
+
+  def send_pdf
     pdf_file = @chart.output_lilypond(:pdf)
     pdf_name = "#{@chart.title}.pdf"
     send_file pdf_file, filename: pdf_name, type: 'application/pdf'
   end
 
-  def png
-    png_file = @chart.output_lilypond(:png)
-    render plain: File.join('/downloads', File.basename(png_file))
-  end
 
-  def embed_png
-    filename = "#{params[:filename]}.#{params[:format]}"
-    path = File.join(Rails.root, 'downloads', filename)
+  def send_png
+    png_name = "#{params[:filename]}.#{params[:format]}"
+    path = File.join(Rails.root, 'downloads', png_name)
     send_file path, type: 'image/png'
-    logger.debug "Sending png file: #{path}"
   end
 
   private

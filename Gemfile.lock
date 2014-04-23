@@ -48,6 +48,8 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.7.0)
+    detect_timezone_rails (0.0.5)
+      railties (>= 3.1)
     devise (3.2.4)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -195,6 +197,7 @@ DEPENDENCIES
   capybara (= 2.1.0)
   chartup (= 0.0.1)
   coffee-rails (= 4.0.1)
+  detect_timezone_rails (= 0.0.5)
   devise (= 3.2.4)
   factory_girl_rails (= 4.2.1)
   jbuilder (= 1.0.2)
