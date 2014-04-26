@@ -1,51 +1,109 @@
-var responseText;
-
 $(document).ready(function() {
-	/*
-	$('.edit_chart').on("ajax:success", function(e, data, status, xhr) {
-		$('#preview-image').attr('src', xhr.responseText);
-		console.log("Success");
-		console.log(xhr.responseText);
-	}).on("ajax:error", function(e, xhr, status, error) {
-	    // $(".edit_chart").append ("error json: " + jQuery.parseJSON(xhr.responseText))
-	    console.log("Error: " + status);
-	    console.log(xhr.responseText);
-	    responseText = xhr.responseText;
-		$('#preview-image').attr('src', xhr.responseText);
-	});
-*/
-	// Retrieve PNG URL via AJAX and embed in page.
-	$('#preview-button').click ( function(e) {
-		e.preventDefault();
-		previewImage = $('#preview-image');
-		var oldImage = previewImage.attr('src');
-		previewImage.attr('src', "<%= asset_path 'loading.gif' %>" );
-		$.ajax({
-			type: "POST",
-			url: "/charts/preview",
-			data: $('.chart_form').serialize(),
-			dataType: 'text',
-			success: function(data, status, xhr) {
-				console.log('success');
-				console.log(xhr.responseText);
-				//$('#chart').val(data);
-				previewImage.attr('src', xhr.responseText);
-			},
-			error: function(xhr, status, error) {
-				console.log(error);
-				console.log(xhr.responseText);
-				previewImage.attr('src', oldImage);
-				//$('#preview-image').attr('src', xhr.responseText);
-			}
-		});
-	});
 
-	// Submit data to download action.
-	$('#pdf-button').click ( function(e) {
-		e.preventDefault();
-		var form = $('.chart_form');
-		var oldAction = form.attr('action');
-		form.attr('action', "/charts/download").submit();
-		form.attr('action', oldAction);
-	});
+	// Functionality for Chart form
+	if ($('.chart_form').length > 0) {
+		var formChanged = false;
+
+		// Enable autosave
+		var autosave = function() {
+			if (formChanged) {
+				console.log("Autosaving...");
+				localStorage['chart_title'] = $('#chart_title').val();
+				localStorage['chart_chartup'] = $('#chart_chartup').val();
+				console.log("Autosave complete.")
+				formChanged = false;
+			}
+		};
+
+		setInterval(autosave, 90 * 1000); //Autosave every minute and a half
+
+		// Autosave if we leave the page
+		$(window).on("beforeunload", function() {
+			autosave();
+		});
+
+		// Autosaving only occurs if form is changed
+		$('.chart_form .form-control').on('change keyup', function() { 
+			formChanged = true; 
+		});
+
+		var deleteAutosave = function() {
+			localStorage.removeItem('chart_title');
+			localStorage.removeItem('chart_chartup');
+		};
+
+		// Clean out autosaves when we save to database
+		// TODO: This should only happen on successful save!
+		$('.chart_form').submit(function() {
+			deleteAutosave();
+		});
+
+		var loadFromAutosave = function() {
+			$('#chart_title').val(localStorage['chart_title']);
+			$('#chart_chartup').val(localStorage['chart_chartup']);
+		};
+
+		var autosaveDataExists = function() {
+			return localStorage['chart_title'] || localStorage['chart_chartup'];
+		};
+		
+		var deleteAutosaveWithConfirmation = function(newTitle) {
+			if (autosaveDataExists()) {
+				if (confirm("You have unsaved changes to the chart \"" + localStorage['chart_title'] + "\". " +
+					"Are you sure you want to scrap them, and work on " + newTitle + " instead?")) {
+
+					deleteAutosave();
+
+				}
+				else {
+					window.location.replace("/");
+				}
+			}
+		};
+
+		// When loading new chart, make sure we no longer need autosave chart. Otherwise, load autosave chart instead.
+		switch ($('#hidden-action-tag').html()) {
+			case "home":
+				loadFromAutosave();
+			break;
+			case "new":
+				deleteAutosaveWithConfirmation("a new chart");
+			break;
+			case "edit":
+				deleteAutosaveWithConfirmation("\"" + $('#chart_title').val() + "\"");			 
+			break;
+		}
+
+		// Retrieve PNG URL via AJAX and embed in page.
+		$('#preview-button').click ( function(e) {
+			e.preventDefault();
+			previewImage = $('#preview-image');
+			var oldImage = previewImage.attr('src');
+			previewImage.attr('src', "<%= asset_path 'loading.gif' %>" );
+			$.ajax({
+				type: "POST",
+				url: "/charts/preview",
+				data: $('.chart_form').serialize(),
+				dataType: 'text',
+				success: function(data, status, xhr) {
+					previewImage.attr('src', xhr.responseText);
+				},
+				error: function(xhr, status, error) {
+					console.log(error);
+					console.log(xhr.responseText);
+					previewImage.attr('src', oldImage);
+				}
+			});
+		});
+
+		// Submit data to download action.
+		$('#pdf-button').click ( function(e) {
+			e.preventDefault();
+			var form = $('.chart_form');
+			var oldAction = form.attr('action');
+			form.attr('action', "/charts/download").submit();
+			form.attr('action', oldAction);
+		});
+
+	}
 });

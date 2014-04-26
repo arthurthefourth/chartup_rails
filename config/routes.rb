@@ -1,14 +1,16 @@
 ChartupRails::Application.routes.draw do
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
   devise_scope :user do
-    get 'sign_out', to: 'devise/sessions#destroy'
+    delete 'sign_out', to: 'devise/sessions#destroy'
   end
 
   patch 'charts/preview', :to => 'charts#preview', as: :preview
-  patch 'charts/download', :to => 'charts#download', as: :download
+  post 'charts/preview', to: 'charts#preview'
+  post 'charts/download', :to => 'charts#download', as: :download
 
   resources :charts
-  root 'charts#new'
+
+  root 'charts#home'
 
   get 'charts/:id/pdf', to: 'charts#pdf', as: :pdf
   get 'charts/:id/png', to: 'charts#png', as: :png

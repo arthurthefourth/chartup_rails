@@ -10,7 +10,7 @@ gem 'bcrypt-ruby', '3.1.2'
 gem 'devise', '3.2.4'
 gem 'chartup', '0.0.1'
 gem 'omniauth-facebook', '1.6.0'
-gem 'detect_timezone_rails', '0.0.5'
+gem 'newrelic_rpm'
 
 group :development, :test do 
   gem 'sqlite3', '1.3.8'
@@ -26,7 +26,8 @@ end
 gem 'uglifier', '2.1.1'
 gem 'coffee-rails', '4.0.1'
 gem 'jquery-rails', '3.0.4' 
-gem 'turbolinks', '1.1.1'
+#gem 'turbolinks', '1.1.1'
+#gem 'jquery-turbolinks', '2.0.2'
 gem 'jbuilder', '1.0.2'
 
 group :doc do

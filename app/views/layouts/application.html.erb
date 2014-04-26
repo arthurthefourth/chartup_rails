@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ChartUp</title>
-  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
-  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
-  <%= csrf_meta_tags %>
-  <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+	<title>ChartUp</title>
+	<%= stylesheet_link_tag    "application", media: "all" %>
+	<%= javascript_include_tag "application" %>
+	<%= csrf_meta_tags %>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
+	<div id="hidden-controller-tag" style="display:none"><%= controller_name %></div>
+	<div id="hidden-action-tag" style="display:none"><%= action_name %></div>
 	<%= render 'layouts/header' %>
 
-<% if flash[:notice] %>
-  <p class="alert alert-success"><%= flash[:notice] %></p>
-<% end %>
-<% if flash[:alert] %>
-  <p class="alert alert-danger"><%= flash[:alert] %></p>
-<% end %>
-<div class="container">
-  <div id="main_page">
-<%= yield %>
-</div>
-</div>
+	<% if flash[:notice] %>
+		<p class="alert alert-success"><%= flash[:notice] %></p>
+	<% end %>
+	<% if flash[:alert] %>
+		<p class="alert alert-danger"><%= flash[:alert] %></p>
+	<% end %>
+	<div class="container">
+		<div id="main_page">
+			<%= yield %>
+		</div>
+    <%= debug(params) if Rails.env.development? %>
+	</div>
+
 </body>
 </html>

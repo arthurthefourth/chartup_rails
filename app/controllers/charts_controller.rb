@@ -1,17 +1,26 @@
 class ChartsController < ApplicationController
-  before_action :authenticate_user!, only: [:index, :update, :edit, :create]
+  before_action :authenticate_user!, only: [:index, :update, :create]
 
 
   def index
   end
 
-  def show
-    edit
+  def home
+    @chart = Chart.new
+    render :new
+  end
+
+  def new
+    @chart = Chart.new
+    @chart.title = 'Untitled'
   end
 
   def edit
     @chart = Chart.find(params[:id])
-    render :edit
+  end
+
+  def show
+    edit
   end
 
   def destroy
@@ -20,35 +29,28 @@ class ChartsController < ApplicationController
     redirect_to charts_path
   end
 
-  def new
-    @chart = Chart.new
-    @chart.title = 'Untitled'
-    render :edit
-  end
-
-
   def create
     @chart = current_user.charts.build(chart_params)
     if @chart.save
-      flash[:notice] = 'Chart created.'
-      render :edit
+      flash[:notice] = 'Chart saved.'
+      redirect_to edit_chart_path(@chart)
     else
       flash[:alert] = "Something went wrong. #{@chart.errors}"  
       render :edit    
     end
   end
 
-
   def update
     @chart = current_user.charts.find(params[:id])
     if @chart.update_attributes(chart_params)
       flash[:notice] = 'Chart updated.'
-      render :edit
+      redirect_to edit_chart_path(@chart)
     else
-      flash[:alert] = 'Something went wrong.' 
+      flash[:alert] = 'Something went wrong. #{@chart.errors}' 
       render :edit
     end
   end
+
 
   def preview
     @chart = Chart.new(chart_params)
@@ -90,5 +92,6 @@ class ChartsController < ApplicationController
   def chart_params
     params.require(:chart).permit(:title, :chartup)
   end
+
 
 end
