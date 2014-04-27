@@ -1,5 +1,5 @@
 class ChartsController < ApplicationController
-  before_action :authenticate_user!, only: [:index, :update, :create]
+  before_action :authenticate_user!, only: [:index, :edit, :update, :create]
 
 
   def index
@@ -16,7 +16,7 @@ class ChartsController < ApplicationController
   end
 
   def edit
-    @chart = Chart.find(params[:id])
+    @chart = current_user.charts.find(params[:id])
   end
 
   def show

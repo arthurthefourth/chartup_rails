@@ -1,20 +1,19 @@
 ChartupRails::Application.routes.draw do
-  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+
+  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
+
   devise_scope :user do
     delete 'sign_out', to: 'devise/sessions#destroy'
   end
 
-  patch 'charts/preview', :to => 'charts#preview', as: :preview
-  post 'charts/preview', to: 'charts#preview'
-  post 'charts/download', :to => 'charts#download', as: :download
-
   resources :charts
-
   root 'charts#home'
 
-  get 'charts/:id/pdf', to: 'charts#pdf', as: :pdf
-  get 'charts/:id/png', to: 'charts#png', as: :png
-  get 'downloads/:filename', :to => 'charts#send_png', as: :send_png
+  patch 'charts/preview', to: 'charts#preview', as: :preview
+  post 'charts/preview', to: 'charts#preview'
+  post 'charts/download', to: 'charts#download', as: :download
+
+  get 'downloads/:filename', to: 'charts#send_png', as: :send_png
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
