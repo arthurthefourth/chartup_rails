@@ -6,12 +6,13 @@ ChartupRails::Application.routes.draw do
     delete 'sign_out', to: 'devise/sessions#destroy'
   end
 
-  resources :charts
-  root 'charts#home'
 
+  root 'charts#home'
+  # These routes have to come first, or preview will be seen as an id
   patch 'charts/preview', to: 'charts#preview', as: :preview
   post 'charts/preview', to: 'charts#preview'
   post 'charts/download', to: 'charts#download', as: :download
+  resources :charts
 
   get 'downloads/:filename', to: 'charts#send_png', as: :send_png
 

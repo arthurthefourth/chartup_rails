@@ -28,3 +28,4 @@ public/assets/application*
 public/assets/manifest*
 /downloads
 .vagrant/
+config/secrets.yml
