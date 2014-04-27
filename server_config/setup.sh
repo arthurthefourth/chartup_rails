@@ -63,6 +63,9 @@ sudo service nginx start
 	# root /var/www/my_awesome_rails_app/public; 
 	# }
 
+mkdir downloads
+# Deploy secrets.yml somehow
+
 #In production
 RAILS_ENV=production rake db:create db:schema:load
 RAILS_ENV=production bundle exec rake assets:precompile

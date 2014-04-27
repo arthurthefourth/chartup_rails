@@ -16,7 +16,7 @@ class Chart < ActiveRecord::Base
     when :pdf
       Open3.capture2("#{lilypond_path} --output=#{filename} -", :stdin_data => chartup.to_ly)
     when :png
-      Open3.capture2("#{lilypond_path}  --output=#{filename} -dbackend=eps -dno-gs-load-fonts -dinclude-eps-fonts --png -", :stdin_data => chartup.to_ly)
+      Open3.capture2("#{lilypond_path}  --output=#{filename} -dbackend=eps -dno-gs-load-fonts -dinclude-eps-fonts -ddeleteintermediatefiles --png -", :stdin_data => chartup.to_ly)
     end
     "#{filename}.#{format.to_s}"
   end
