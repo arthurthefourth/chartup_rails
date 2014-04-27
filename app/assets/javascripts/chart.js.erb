@@ -2,6 +2,11 @@ $(document).ready(function() {
 
 	// Functionality for Chart form
 	if ($('.chart_form').length > 0) {
+
+		$('#instructions-link').click(function() {
+			$('#instructions-modal').modal();
+		});
+		
 		var formChanged = false;
 
 		// Enable autosave
@@ -38,6 +43,8 @@ $(document).ready(function() {
 			deleteAutosave();
 		});
 
+		$('.save-button').click(deleteAutosave);
+
 		var loadFromAutosave = function() {
 			$('#chart_title').val(localStorage['chart_title']);
 			$('#chart_chartup').val(localStorage['chart_chartup']);
@@ -49,15 +56,18 @@ $(document).ready(function() {
 		
 		var deleteAutosaveWithConfirmation = function(newTitle) {
 			if (autosaveDataExists()) {
-				if (confirm("You have unsaved changes to the chart \"" + localStorage['chart_title'] + "\". " +
-					"Are you sure you want to scrap them, and work on " + newTitle + " instead?")) {
+				bootbox.confirm("You have unsaved changes to the chart \"" + localStorage['chart_title'] + "\". " +
+					"Are you sure you want to scrap them, and work on " + newTitle + " instead?", 
+					function(result) {
 
-					deleteAutosave();
-
-				}
-				else {
-					window.location.replace("/");
-				}
+						if (result) {
+							deleteAutosave();
+						}
+						else {
+							window.location.replace("/");
+						}
+					}
+				);
 			}
 		};
 
@@ -78,8 +88,9 @@ $(document).ready(function() {
 		$('#preview-button').click ( function(e) {
 			e.preventDefault();
 			previewImage = $('#preview-image');
-			var oldImage = previewImage.attr('src');
-			previewImage.attr('src', "<%= asset_path 'loading.gif' %>" );
+			// var oldImage = previewImage.attr('src');
+			// previewImage.attr('src', "<%= asset_path 'loading.gif' %>" );
+			$('#preview-button').button('loading');
 			$.ajax({
 				type: "POST",
 				url: "/charts/preview",
@@ -87,11 +98,13 @@ $(document).ready(function() {
 				dataType: 'text',
 				success: function(data, status, xhr) {
 					previewImage.attr('src', xhr.responseText);
+					$('#preview-button').button('reset');
 				},
 				error: function(xhr, status, error) {
 					console.log(error);
 					console.log(xhr.responseText);
 					previewImage.attr('src', oldImage);
+					$('#preview-button').button('loading');
 				}
 			});
 		});

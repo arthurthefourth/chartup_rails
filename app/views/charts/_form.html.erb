@@ -1,7 +1,6 @@
 <div class='container'>
-	<div class='row'>
+	<div class='row well'>
 		<div class="col-md-6">
-			<p id="autosave-message">Autosaving...</p>
 			<%= form_for(@chart, html: {class: 'chart_form'}) do |f| %>
 			    <% @chart.errors.full_messages.each do |msg| %>
 			      <p class="alert alert-danger"><%= msg %></p>
@@ -15,14 +14,14 @@
 					<%= f.text_area :chartup, size: '60x20', class: 'form-control', value: @chart.chartup_without_title %>
 				</div>
 				<div class='form-group submit-button-container' >
-					<%= f.submit 'Preview', class: 'btn', id: 'preview-button' %>
-					<%= f.submit 'Save', class: 'btn' %>
+					<%= f.submit 'Preview', class: 'btn', id: 'preview-button', data: { "loading-text" => 'Loading...' } %>
+					<%= f.submit 'Save', class: 'btn', id: 'save-button' %>
 					<%= f.submit 'Download PDF', class: 'btn', id: 'pdf-button' %>
 				</div>
 			<% end %>
 		</div>
 		<div class="col-md-6" id="preview-image-container">
-				<img id='preview-image'>
+			<img id='preview-image'>
 		</div>
 	</div>
 </div>

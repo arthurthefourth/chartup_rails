@@ -1,4 +1,4 @@
-<header class="navbar navbar-default navbar-fixed-top navbar-inverse">
+<header class="navbar navbar-default navbar-fixed-top">
 
 		<div class="container">
 
@@ -8,10 +8,13 @@
 			<nav class="collapse navbar-collapse" role="navigation">
 				<ul class="nav navbar-nav pull-right">
 
-
+						<li><a href='javascript:void(0)' id='instructions-link'>Instructions</a></li>
 					<% if signed_in? %>
 						<li><%= link_to "New Chart", new_chart_path, id: 'new-chart-button' %></li>
-						<li><%= link_to "My Charts", charts_path %></li>
+						<li><%= link_to charts_path do %>
+							My Charts <span class="badge"><%= current_user.charts.count %></span>
+							<% end %>
+						</li>
 						<li id='menu' class='dropdown'>
 							<a href='#' class='dropdown-toggle' data-toggle='dropdown'>
 								<%= current_user.name || current_user.email %><b class='caret'></b>

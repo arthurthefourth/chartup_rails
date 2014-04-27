@@ -1,7 +1,7 @@
 <h2>My Charts</h2>
 
 <ul class="list-group">
-<% current_user.charts.each do |chart| %>
+<% current_user.charts.order(updated_at: :desc).each do |chart| %>
 	<li class="list-group-item">
 		<h4><%= link_to chart.title, edit_chart_path(chart), class: 'list-group-item-heading' %></h4>
 		<p class="list-group-item-text">
