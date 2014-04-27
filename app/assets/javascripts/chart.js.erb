@@ -1,12 +1,15 @@
 $(document).ready(function() {
 
+	// Instructions link in navbar
+	$('#instructions-link').click(function() {
+		$('#instructions-modal').modal();
+	});
+	
 	// Functionality for Chart form
 	if ($('.chart_form').length > 0) {
 
-		$('#instructions-link').click(function() {
-			$('#instructions-modal').modal();
-		});
-		
+
+
 		var formChanged = false;
 
 		// Enable autosave
