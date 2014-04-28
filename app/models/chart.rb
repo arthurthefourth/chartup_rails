@@ -3,11 +3,12 @@ class Chart < ActiveRecord::Base
   #attr_accessor :title, :chartup, :composer
 
   belongs_to :user
-  after_validation :set_titles
+  after_validation :sync_titles
 
   validates :title, presence: true
   validates :chartup, presence: true
 
+  # Converts Chartup to Lilypond format, and generates the appropriate file
   def output_lilypond(format)
     filename = File.join(Rails.root, 'downloads', SecureRandom.uuid)
     lilypond_path = Rails.application.config.lilypond_path
@@ -21,6 +22,7 @@ class Chart < ActiveRecord::Base
     "#{filename}.#{format.to_s}"
   end
 
+
   def chartup_without_title
     if chartup
       chartup.lines.reject {|line| is_title(line)}.map! {|line| line.chomp }.compact.join("\n")
@@ -33,7 +35,7 @@ class Chart < ActiveRecord::Base
     (self.chartup == other_chart.chartup) && (self.title == other_chart.title)
   end
 
-
+  # Nicely formatted time/date last updated
   def last_updated
     time = self.updated_at
     if time < Time.now - (3600 * 24)
@@ -44,8 +46,11 @@ class Chart < ActiveRecord::Base
   end
 
   private
+
+  # Chart objects have a title field, but Chartup documents also store titles.
+  # This method makes sure the titles are in sync before saving.
   # Submitted title field overrides title in Chartup document
-  def set_titles
+  def sync_titles
     # Title was submitted
     if self.title.empty?
       self.title = get_title_from_chartup(chartup) || 'Untitled'

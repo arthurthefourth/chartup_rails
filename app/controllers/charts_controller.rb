@@ -5,6 +5,7 @@ class ChartsController < ApplicationController
   def index
   end
 
+  # Default interface for editing chart from browser storage
   def home
     @chart = Chart.new
     render :new
@@ -51,7 +52,7 @@ class ChartsController < ApplicationController
     end
   end
 
-
+  # POSTing to preview returns the URL for the image
   def preview
     @chart = Chart.new(chart_params)
     if @chart.valid?
@@ -61,6 +62,7 @@ class ChartsController < ApplicationController
     end
   end
 
+  # POSTing to download sends the actual PDF to the browser
   def download
     @chart = Chart.new(chart_params)
     if @chart.valid?
@@ -81,7 +83,7 @@ class ChartsController < ApplicationController
     send_file pdf_file, filename: pdf_name, type: 'application/pdf'
   end
 
-
+  # GETting "downloads/:filename" sends a PNG file
   def send_png
     png_name = "#{params[:filename]}.#{params[:format]}"
     path = File.join(Rails.root, 'downloads', png_name)
