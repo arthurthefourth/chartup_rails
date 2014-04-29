@@ -29,3 +29,7 @@ public/assets/manifest*
 /downloads
 .vagrant/
 config/secrets.yml
+/app/assets/images/FB-f-logo__blue_50.png
+test.ly
+test.pdf
+vendor/assets/fonts/glyph*

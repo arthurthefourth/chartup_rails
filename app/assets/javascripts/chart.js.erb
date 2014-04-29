@@ -8,58 +8,76 @@ $(document).ready(function() {
 	// Functionality for Chart form
 	if ($('.chart_form').length > 0) {
 
-
+		/* AUTOSAVE
+		/*
+		/* The chart is saved to local storage at regular intervals, and when the user leaves the page. 
+		/* When the user saves, local storage is cleared out.
+		/*
+		/* When a new page is loaded (either blank, or with a saved chart), we make sure there's no autosave data. 
+		/* If there is, we confirm that the user wants to start with a new chart. If they don't, we load the autosave data
+		/* with the appropriate URL.
+		====================================*/
 
 		var formChanged = false;
+		var preventAutosave = false;
 
-		// Enable autosave
+		// Autosaving only occurs if the form is changed
+		$('.chart_form .form-control').on('change keyup', function() { 
+			formChanged = true; 
+		});
+
+		//Autosave every minute and a half
 		var autosave = function() {
 			if (formChanged) {
 				console.log("Autosaving...");
-				localStorage['chart_title'] = $('#chart_title').val();
-				localStorage['chart_chartup'] = $('#chart_chartup').val();
+				localStorage.chart_title = $('#chart_title').val();
+				localStorage.chart_chartup = $('#chart_chartup').val();
+				localStorage.chart_url = location.href;
 				console.log("Autosave complete.")
 				formChanged = false;
 			}
 		};
 
-		setInterval(autosave, 90 * 1000); //Autosave every minute and a half
+		setInterval(autosave, 90 * 1000); 
 
-		// Autosave if we leave the page
+		// If we leave the page, autosave. Unless it's from the save button. 
 		$(window).on("beforeunload", function() {
-			autosave();
+			if (! preventAutosave) {
+				autosave();
+				preventAutosave = false;
+			}
 		});
 
-		// Autosaving only occurs if form is changed
-		$('.chart_form .form-control').on('change keyup', function() { 
-			formChanged = true; 
-		});
-
-		var deleteAutosave = function() {
-			localStorage.removeItem('chart_title');
-			localStorage.removeItem('chart_chartup');
-		};
 
 		// Clean out autosaves when we save to database
 		// TODO: This should only happen on successful save!
-		$('.chart_form').submit(function() {
+		var deleteAutosave = function() {
+			localStorage.removeItem('chart_title');
+			localStorage.removeItem('chart_chartup');
+			localStorage.removeItem('chart_url');
+		};
+
+		$('.chart_form').submit(function(e) {
+			e.preventDefault();
 			deleteAutosave();
+			preventAutosave = true;
+			this.submit(); // Submit form directly to avoid triggering jQuery handler
 		});
 
-		$('.save-button').click(deleteAutosave);
 
 		var loadFromAutosave = function() {
-			$('#chart_title').val(localStorage['chart_title']);
-			$('#chart_chartup').val(localStorage['chart_chartup']);
+			$('#chart_title').val(localStorage.chart_title);
+			$('#chart_chartup').val(localStorage.chart_chartup);
 		};
 
 		var autosaveDataExists = function() {
-			return localStorage['chart_title'] || localStorage['chart_chartup'];
+			return localStorage.chart_title || localStorage.chart_chartup;
 		};
-		
-		var deleteAutosaveWithConfirmation = function(newTitle) {
+
+
+		var deleteOrLoadAutosave = function(newTitle) {
 			if (autosaveDataExists()) {
-				bootbox.confirm("You have unsaved changes to the chart \"" + localStorage['chart_title'] + "\". " +
+				bootbox.confirm("You have unsaved changes to the chart \"" + localStorage.chart_title + "\". " +
 					"Are you sure you want to scrap them, and work on " + newTitle + " instead?", 
 					function(result) {
 
@@ -67,25 +85,39 @@ $(document).ready(function() {
 							deleteAutosave();
 						}
 						else {
-							window.location.replace("/");
+							if (localStorage.chart_url) {
+								localStorage.forceLoadFromAutosave = true;
+								location.href = localStorage.chart_url;
+							}
 						}
 					}
 				);
 			}
 		};
 
-		// When loading new chart, make sure we no longer need autosave chart. Otherwise, load autosave chart instead.
-		switch ($('#hidden-action-tag').html()) {
-			case "home":
-				loadFromAutosave();
-			break;
-			case "new":
-				deleteAutosaveWithConfirmation("a new chart");
-			break;
-			case "edit":
-				deleteAutosaveWithConfirmation("\"" + $('#chart_title').val() + "\"");			 
-			break;
+		if (localStorage.forceLoadFromAutosave) {
+			loadFromAutosave();
+			localStorage.removeItem('forceLoadFromAutosave');
 		}
+		else {
+			switch ($('#hidden-action-tag').html()) {
+				case "home":
+					if (localStorage.chart_url) {
+						localStorage.forceLoadFromAutosave = true;
+						location.href = localStorage.chart_url;
+					}
+				break;
+				case "new":
+					deleteOrLoadAutosave("a new chart");
+				break;
+				case "edit":
+					deleteOrLoadAutosave('"' + $('#chart_title').val() + '"');			 
+				break;
+			}
+		}
+
+		/* CHART IMAGES
+		====================================*/
 
 		// Retrieve PNG URL via AJAX and embed in page.
 		$('#preview-button').click ( function(e) {
