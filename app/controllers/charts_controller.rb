@@ -58,7 +58,7 @@ class ChartsController < ApplicationController
     if @chart.valid?
       png_url
     else
-      render nothing: true
+        render json: { error: @chart.errors.full_messages} , status: 422
     end
   end
 
@@ -68,7 +68,7 @@ class ChartsController < ApplicationController
     if @chart.valid?
       send_pdf
     else
-      render nothing: true
+      render :edit
     end
   end
 

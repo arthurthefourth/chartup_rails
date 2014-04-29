@@ -130,16 +130,20 @@ $(document).ready(function() {
 				type: "POST",
 				url: "/charts/preview",
 				data: $('.chart_form').serialize(),
-				dataType: 'text',
+				// dataType: 'text',
 				success: function(data, status, xhr) {
 					previewImage.attr('src', xhr.responseText);
 					$('#preview-button').button('reset');
 				},
 				error: function(xhr, status, error) {
 					console.log(error);
-					console.log(xhr.responseText);
-					previewImage.attr('src', oldImage);
-					$('#preview-button').button('loading');
+					console.log(xhr.responseJSON);
+					errors = xhr.responseJSON.error;
+					$('#form-errors').html('');
+					for (var i = 0; i < errors.length; i++) {
+						$('#form-errors').prepend("<p class='alert alert-danger'>" + errors[i] + "</p>");
+					}
+					$('#preview-button').button('reset');
 				}
 			});
 		});
