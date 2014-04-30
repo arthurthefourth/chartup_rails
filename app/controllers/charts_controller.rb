@@ -1,6 +1,6 @@
 class ChartsController < ApplicationController
   before_action :authenticate_user!, only: [:index, :edit, :update, :create]
-
+  before_action :correct_user, only: [:edit, :show, :update]
 
   def index
   end
@@ -17,11 +17,11 @@ class ChartsController < ApplicationController
   end
 
   def edit
-    @chart = current_user.charts.find(params[:id])
   end
 
   def show
     edit
+    render :edit
   end
 
   def destroy
@@ -42,7 +42,6 @@ class ChartsController < ApplicationController
   end
 
   def update
-    @chart = current_user.charts.find(params[:id])
     if @chart.update_attributes(chart_params)
       flash[:notice] = 'Chart updated.'
       redirect_to edit_chart_path(@chart)
@@ -95,5 +94,8 @@ class ChartsController < ApplicationController
     params.require(:chart).permit(:title, :chartup)
   end
 
-
+  def correct_user
+    @chart = current_user.charts.find_by(id: params[:id])
+    redirect_to root_url if @chart.nil?
+  end
 end

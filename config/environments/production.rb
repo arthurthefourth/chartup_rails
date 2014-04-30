@@ -80,4 +80,7 @@ ChartupRails::Application.configure do
 
   # Constants
   config.lilypond_path = '/usr/local/bin/lilypond'
+
+  config.action_mailer.default_url_options = { :host => 'chartup.arthurthefourth.com' }  
+
 end
