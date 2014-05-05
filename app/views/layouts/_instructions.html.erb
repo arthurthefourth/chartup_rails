@@ -7,7 +7,9 @@
 	      <h2>Instructions</h2>
 		</div>
 		<div class="modal-body">
-		    <p>Thanks for checking out ChartUp, a simple language designed to make writing charts easier. It's still in the early stages, so you can't do a lot of things yet. Here's a sample chart:</p>
+		    <p>Thanks for checking out ChartUp, a simple language designed to make writing charts easier. It's still in the early stages, so you can't do a lot of things yet.</p>
+
+		    <p>Here's a sample chart:</p>
 
 		    <pre>
 VERSE
@@ -18,19 +20,46 @@ F | Fm | Gm7b5 - C7 - |
 
 CHORUS
 --------------
-Fm - - C#7 | A6 Dm7 F#m9 E5 | D5 D7#5 D6 D13 |
+Fm - - C#7 | A6 Dm7 F#m9 Em7b5 | D D7#5 D6 D13 |
     G          | Gm7 C7       | E7 - A7 -  |
 
 BRIDGE
 --------------
 F | Bb | Gm | A7 | D | D
-</pre>
+			</pre>
 
 
-			<h4>Tips and Tricks</h4>
+			<h3>How It Works:</h3>
+			<ul class='list-group'>
+				<li class='list-group-item'>
+					<h4 class='list-group-item-heading'>Titles:</h4>
+					<p class='list-group-item-text'>
+						You can title any section by putting the title on its own line, and then putting a line of dashes ("------") under it.
+					</p>
+				</li>
+				<li class='list-group-item'>
+					<h4 class='list-group-item-heading'>Measures:</h4>
+					<p class='list-group-item-text'>
+						Measures are separated with pipe characters ("|"). Right now, Chartup only supports 4/4, so measures can fit up to 4 quarter-note long chords. 
+					</p>
+				</li>
+				<li class='list-group-item'>
+					<h4 class='list-group-item-heading'>Chords:</h4>
+					<p class='list-group-item-text'>
+						By default, chords last for one beat. To extend a chord, put a dash after it. For example, "Gm - - " would last for 3 beats.
+					</p>
+					<p class='list-group-item-text'>
+						If there aren't enough chords in a measure, Chartup will extend chords appropriately. 
+					</p>
+				</li>
+			</ul>
+
+			<h3>Things That Don't Work Yet:</h3>
 			<ul>
-				<li>Chord shorthand: Use `-` to extend a chord for multiple beats. Leaving only one or two chords in a bar will make them whole notes or half notes, respectively.</li>
-				<li>Rehearsal Marks: Put `------` under a letter, word, or phrase to mark the section below it. </li>
+				<li>Time Signatures other than 4/4</li>
+				<li>Key Signatures </li>
+				<li>Repeat barlines</li>
+				<li>Slash chords (e.g. A/G)</li>
 			</ul>
 		</div>
     </div>
