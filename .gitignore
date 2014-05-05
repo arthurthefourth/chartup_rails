@@ -26,7 +26,7 @@ doc/
 
 public/assets/application*
 public/assets/manifest*
-/downloads
+/downloads/*
 .vagrant/
 config/secrets.yml
 /app/assets/images/FB-f-logo__blue_50.png
