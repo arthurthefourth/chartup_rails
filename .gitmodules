@@ -1,0 +1,3 @@
+[submodule "chartup"]
+	path = chartup
+	url = https://github.com/arthurthefourth/chartup.git

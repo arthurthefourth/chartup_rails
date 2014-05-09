@@ -1,13 +1,13 @@
 class ChartsController < ApplicationController
-  before_action :authenticate_user!, only: [:index, :edit, :update, :create]
-  before_action :correct_user, only: [:edit, :show, :update]
+  before_action :authenticate_user!, only: [:index, :edit, :show, :update, :create]
+  before_action :correct_user, only: [:edit, :show, :update, :destroy]
 
   def index
   end
 
   # Default interface for editing chart from browser storage
   def home
-    @chart = Chart.new
+    new
     render :new
   end
 
@@ -74,12 +74,17 @@ class ChartsController < ApplicationController
   def png_url
     png_file = @chart.output_lilypond(:png)
     render plain: File.join('/downloads', File.basename(png_file))
+  rescue Chartup::Error => error
+    render json: { error: [error.to_s]}, status: 422
   end
 
   def send_pdf
     pdf_file = @chart.output_lilypond(:pdf)
     pdf_name = "#{@chart.title}.pdf"
     send_file pdf_file, filename: pdf_name, type: 'application/pdf'
+  rescue Chartup::Error => error
+    flash[:chart_alert] = error.to_s
+    render :edit
   end
 
   # GETting "downloads/:filename" sends a PNG file

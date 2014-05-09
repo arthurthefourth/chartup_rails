@@ -1,5 +1,6 @@
 class Chart < ActiveRecord::Base
   require 'open3'
+  require Rails.root + "chartup/lib/chartup.rb"
   #attr_accessor :title, :chartup, :composer
 
   belongs_to :user
@@ -20,6 +21,8 @@ class Chart < ActiveRecord::Base
       Open3.capture2("#{lilypond_path}  --output=#{filename} -dbackend=eps -dno-gs-load-fonts -dinclude-eps-fonts -ddeleteintermediatefiles --png -", :stdin_data => chartup.to_ly)
     end
     "#{filename}.#{format.to_s}"
+  rescue Chartup::Error
+    raise
   end
 
 

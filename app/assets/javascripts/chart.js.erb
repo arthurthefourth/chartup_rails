@@ -136,8 +136,8 @@ $(document).ready(function() {
 					$('#preview-button').button('reset');
 				},
 				error: function(xhr, status, error) {
-					console.log(error);
-					console.log(xhr.responseJSON);
+					//console.log(error);
+					//console.log(xhr.responseJSON);
 					errors = xhr.responseJSON.error;
 					$('#form-errors').html('');
 					for (var i = 0; i < errors.length; i++) {

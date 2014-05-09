@@ -12,6 +12,7 @@ ChartupRails::Application.routes.draw do
   patch 'charts/preview', to: 'charts#preview', as: :preview
   post 'charts/preview', to: 'charts#preview'
   post 'charts/download', to: 'charts#download', as: :download
+  patch 'charts/download', to: 'charts#download'
   resources :charts
 
   get 'downloads/:filename', to: 'charts#send_png', as: :send_png
