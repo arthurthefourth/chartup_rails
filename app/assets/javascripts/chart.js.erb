@@ -122,7 +122,7 @@ $(document).ready(function() {
 		// Retrieve PNG URL via AJAX and embed in page.
 		$('#preview-button').click ( function(e) {
 			e.preventDefault();
-			previewImage = $('#preview-image');
+			previewImage = $('#main-preview-image');
 			// var oldImage = previewImage.attr('src');
 			// previewImage.attr('src', "<%= asset_path 'loading.gif' %>" );
 			$('#preview-button').button('loading');
@@ -136,8 +136,8 @@ $(document).ready(function() {
 					$('#preview-button').button('reset');
 				},
 				error: function(xhr, status, error) {
-					//console.log(error);
-					//console.log(xhr.responseJSON);
+					console.log(error);
+					console.log(xhr.responseJSON);
 					errors = xhr.responseJSON.error;
 					$('#form-errors').html('');
 					for (var i = 0; i < errors.length; i++) {

@@ -36,7 +36,6 @@ class ChartsController < ApplicationController
       flash[:notice] = 'Chart saved.'
       redirect_to edit_chart_path(@chart)
     else
-      flash[:alert] = "Something went wrong. #{@chart.errors}"  
       render :edit    
     end
   end
@@ -46,7 +45,6 @@ class ChartsController < ApplicationController
       flash[:notice] = 'Chart updated.'
       redirect_to edit_chart_path(@chart)
     else
-      flash[:alert] = 'Something went wrong. #{@chart.errors}' 
       render :edit
     end
   end
@@ -74,17 +72,12 @@ class ChartsController < ApplicationController
   def png_url
     png_file = @chart.output_lilypond(:png)
     render plain: File.join('/downloads', File.basename(png_file))
-  rescue Chartup::Error => error
-    render json: { error: [error.to_s]}, status: 422
   end
 
   def send_pdf
     pdf_file = @chart.output_lilypond(:pdf)
     pdf_name = "#{@chart.title}.pdf"
     send_file pdf_file, filename: pdf_name, type: 'application/pdf'
-  rescue Chartup::Error => error
-    flash[:chart_alert] = error.to_s
-    render :edit
   end
 
   # GETting "downloads/:filename" sends a PNG file

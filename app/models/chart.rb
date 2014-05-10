@@ -8,6 +8,7 @@ class Chart < ActiveRecord::Base
 
   validates :title, presence: true
   validates :chartup, presence: true
+  validate :chartup_must_be_valid 
 
   # Converts Chartup to Lilypond format, and generates the appropriate file
   def output_lilypond(format)
@@ -55,7 +56,7 @@ class Chart < ActiveRecord::Base
   # Submitted title field overrides title in Chartup document
   def sync_titles
     # Title was submitted
-    if self.title.empty?
+    if self.title.blank?
       self.title = get_title_from_chartup(chartup) || 'Untitled'
     else
       set_chartup_title(self.title)
@@ -79,5 +80,11 @@ class Chart < ActiveRecord::Base
 
   def is_title(line)
     line.downcase.start_with? 'title:'
+  end
+
+  def chartup_must_be_valid
+    Chartup.validate_syntax(chartup)
+  rescue Chartup::Error => error
+    errors.add(:chartup, "error: #{error.to_s}")
   end
 end
