@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140413195909) do
+ActiveRecord::Schema.define(version: 20140511193039) do
 
   create_table "charts", force: true do |t|
     t.text     "chartup"
@@ -20,6 +20,45 @@ ActiveRecord::Schema.define(version: 20140413195909) do
     t.string   "title"
     t.integer  "user_id"
   end
+
+  add_index "charts", ["user_id"], name: "index_charts_on_user_id"
+
+  create_table "feature_requests", force: true do |t|
+    t.integer  "feature_id"
+    t.integer  "usability_survey_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "feature_requests", ["feature_id", "usability_survey_id"], name: "index_feature_requests_on_feature_id_and_usability_survey_id", unique: true
+  add_index "feature_requests", ["feature_id"], name: "index_feature_requests_on_feature_id"
+  add_index "feature_requests", ["usability_survey_id"], name: "index_feature_requests_on_usability_survey_id"
+
+  create_table "features", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "site_comments", force: true do |t|
+    t.integer  "user_id"
+    t.boolean  "responded_to"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "site_comments", ["user_id"], name: "index_site_comments_on_user_id"
+
+  create_table "usability_surveys", force: true do |t|
+    t.integer  "user_id"
+    t.boolean  "useful_now"
+    t.boolean  "useful_eventually"
+    t.string   "app_version"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "usability_surveys", ["user_id"], name: "index_usability_surveys_on_user_id"
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false

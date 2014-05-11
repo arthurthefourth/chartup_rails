@@ -6,6 +6,10 @@ class User < ActiveRecord::Base
   :omniauthable, :omniauth_providers => [:facebook]
 
   has_many :charts
+  has_many :usability_surveys
+  has_many :feature_requests, through: :usability_surveys
+  has_many :site_comments
+
   def self.find_for_facebook_oauth(auth)
     where(auth.slice(:provider, :uid)).first_or_create do |user|
       user.provider = auth.provider

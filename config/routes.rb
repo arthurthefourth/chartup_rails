@@ -1,5 +1,8 @@
 ChartupRails::Application.routes.draw do
 
+  resources :feature_requests, only: [:create, :destroy]
+  resources :usability_surveys
+ 
   devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
 
   devise_scope :user do
