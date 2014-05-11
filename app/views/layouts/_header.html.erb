@@ -7,8 +7,18 @@
 			</div>
 			<nav class="collapse navbar-collapse" role="navigation">
 				<ul class="nav navbar-nav pull-right">
+						
+					<li>
+						<a href='javascript:void(0)' id='feedback-link'>
+							<div class='tooltip-wrapper' data-toggle='tooltip' data-placement='bottom' title='Please help make Chartup better!'>Feedback</div>
+						</a>
+					</li>
+					<li>
+						<a href='javascript:void(0)' id='instructions-link'>
+							<div class='tooltip-wrapper' data-toggle='tooltip' data-placement='bottom' title='How to use the Chartup language, plus a complete Sample Chart'>Instructions</div>
+						</a>
+					</li>
 
-						<li><a href='javascript:void(0)' id='instructions-link'>Instructions</a></li>
 					<% if signed_in? %>
 						<li><%= link_to "New Chart", new_chart_path, id: 'new-chart-button' %></li>
 						<li><%= link_to charts_path do %>
@@ -59,7 +69,6 @@
 								</li>
 							</ul>
 						</li>
-						<li class='divider'></li>
 						<li><%= link_to image_tag('FB-f-Logo__blue_29.png', height:20), user_omniauth_authorize_path(:facebook) %></li>
 					<% end %>
 				</ul>

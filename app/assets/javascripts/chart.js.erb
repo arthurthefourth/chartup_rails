@@ -1,10 +1,16 @@
 $(document).ready(function() {
 
-	// Instructions link in navbar
+	// Modals and tooltips in navbar
 	$('#instructions-link').click(function() {
 		$('#instructions-modal').modal();
 	});
+
+	$('#feedback-link').click(function() {
+		$('#feedback-modal').modal();
+	});
 	
+	$('.tooltip-wrapper').tooltip();
+
 	// Functionality for Chart form
 	if ($('.chart_form').length > 0) {
 
