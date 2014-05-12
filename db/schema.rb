@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140511193039) do
+ActiveRecord::Schema.define(version: 20140512014937) do
 
   create_table "charts", force: true do |t|
     t.text     "chartup"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20140511193039) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "category"
   end
 
   create_table "site_comments", force: true do |t|
@@ -45,6 +46,7 @@ ActiveRecord::Schema.define(version: 20140511193039) do
     t.boolean  "responded_to"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "comment"
   end
 
   add_index "site_comments", ["user_id"], name: "index_site_comments_on_user_id"

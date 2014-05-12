@@ -1,7 +1,7 @@
 ChartupRails::Application.routes.draw do
 
   resources :feature_requests, only: [:create, :destroy]
-  resources :usability_surveys
+  resources :usability_surveys, path: 'surveys'
  
   devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
 

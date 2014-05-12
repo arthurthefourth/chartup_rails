@@ -1,0 +1,4 @@
+<% checked = @requests.find_by_id(feature.id) %>
+<%= f.label:feature_name, class: 'btn btn-default form-control', value: !!checked do %>
+	<%= "#{f.radio_button(:feature_name, true)} #{feature_name}".html_safe %>
+<% end %>
