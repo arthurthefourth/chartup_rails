@@ -8,9 +8,10 @@
 			<nav class="collapse navbar-collapse" role="navigation">
 				<ul class="nav navbar-nav pull-left">
 					<li>
-						<a href='javascript:void(0)' id='feedback-link'>
+						<%= link_to survey_path, id: 'feedback-link' do %>
 							<div class='tooltip-wrapper' data-toggle='tooltip' data-placement='bottom' title='Please fill out this survey to help make Chartup better!'>Feedback</div>
-						</a>
+						<% end %>
+
 					</li>					
 				</ul>
 				<ul class="nav navbar-nav pull-right">

@@ -21,4 +21,8 @@ class User < ActiveRecord::Base
     end
   end
 
+  def latest_survey
+    usability_surveys.last
+  end
+  
 end
