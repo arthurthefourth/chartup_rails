@@ -29,6 +29,7 @@ public/assets/manifest*
 /downloads/*
 .vagrant/
 config/secrets.yml
+config/initializers/secret_token.rb
 /app/assets/images/FB-f-logo__blue_50.png
 test.ly
 test.pdf
