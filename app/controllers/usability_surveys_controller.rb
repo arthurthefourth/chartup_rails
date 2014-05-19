@@ -62,13 +62,13 @@ class UsabilitySurveysController < ApplicationController
     end
 
     if @survey.persisted?
-
       flash[:notice] = "Thanks for your help!"
       redirect_to survey_path
     else
       flash[:alert] = "There was a problem with your submission. Your survey was not saved."
       redirect_to survey_path
     end
+    
   end
 
   def survey_params

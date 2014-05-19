@@ -1,5 +1,4 @@
 source 'https://rubygems.org'
-#source 'https://***REMOVED***@gem.fury.io/arthurthefourth/'
 
 ruby '2.1.1'
 gem 'rails', '4.1.0'
