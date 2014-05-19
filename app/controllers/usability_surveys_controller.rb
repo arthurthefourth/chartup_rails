@@ -47,19 +47,17 @@ class UsabilitySurveysController < ApplicationController
     UsabilitySurvey.transaction do
 
       logger.debug "Begin transaction"
-      logger.debug "Survey = #{@survey.pretty_inspect}"
       if @survey.save
-
-      feature_params.each do |feature_id, value|
-        if value == 'true'
-          @survey.feature_requests.find_or_create_by(feature_id: feature_id)
-          logger.debug "Finding or creating #{feature_id}, #{value}"
-        else
-          request = @survey.feature_requests.find_by(feature_id: feature_id)
-          request.destroy if request
-          logger.debug "Destroying or missing #{feature_id}, #{value}"
+        feature_params.each do |feature_id, value|
+          if value == 'true'
+            @survey.feature_requests.find_or_create_by(feature_id: feature_id)
+            logger.debug "Finding or creating #{feature_id}, #{value}"
+          else
+            request = @survey.feature_requests.find_by(feature_id: feature_id)
+            request.destroy if request
+            logger.debug "Destroying or missing #{feature_id}, #{value}"
+          end
         end
-      end
       end
     end
 
@@ -68,6 +66,7 @@ class UsabilitySurveysController < ApplicationController
       flash[:notice] = "Thanks for your help!"
       redirect_to survey_path
     else
+      flash[:alert] = "There was a problem with your submission. Your survey was not saved."
       redirect_to survey_path
     end
   end
