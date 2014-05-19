@@ -1,21 +1,20 @@
 class UsabilitySurveysController < ApplicationController
 
   def edit
-    if current_user
       @survey = current_user.latest_survey
       @requests = @survey.feature_requests
       @features = Feature.all
-      render :edit
-    else
-      new
-      render :new
-    end
   end
 
   def new
-    @survey = UsabilitySurvey.new
-    @requests = FeatureRequest.none
-    @features = Feature.all
+    if current_user && current_user.latest_survey
+      edit
+      render :edit
+    else
+      @survey = UsabilitySurvey.new
+      @requests = FeatureRequest.none
+      @features = Feature.all
+    end
   end
 
 
