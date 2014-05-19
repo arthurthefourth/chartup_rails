@@ -1,6 +1,6 @@
-# setup for Chartup project
-# Works on fresh DigitalOcean Ubuntu 12.04.3 x64 droplet
-# Not to be run as full script
+# Some notes on deploying a new Chartup site
+# Should work mostly on fresh DigitalOcean Ubuntu 12.04.3 x64 droplet
+# Be careful - still needs to be edited (and automated)
 sudo apt-get update
 sudo apt-get install curl nodejs libpq-dev git emacs23-nox libcurl4-openssl-dev
 
@@ -34,6 +34,7 @@ bundle install
 #Lilypond
 curl -O http://download.linuxaudio.org/lilypond/binaries/linux-64/lilypond-2.18.2-1.linux-64.sh
 sudo sh lilypond-2.18.2-1.linux-64.sh
+
 # Nginx and Passenger
 
 # If machine has low RAM
@@ -60,7 +61,7 @@ sudo service nginx start
 	# listen 80; 
 	# server_name example.com; 
 	# passenger_enabled on; 
-	# root /var/www/my_awesome_rails_app/public; 
+	# root /path/to/chartup_rails/public; 
 	# }
 
 mkdir downloads
@@ -71,7 +72,7 @@ RAILS_ENV=production rake db:create db:schema:load
 RAILS_ENV=production bundle exec rake assets:precompile
 #bundle exec rails server -e production
 
-#As root
+#NewRelic Setup (As root)
 echo deb http://apt.newrelic.com/debian/ newrelic non-free >> /etc/apt/sources.list.d/newrelic.list
 wget -O- https://download.newrelic.com/548C16BF.gpg | apt-key add -
 apt-get update
