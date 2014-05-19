@@ -35,7 +35,7 @@ class UsabilitySurveysController < ApplicationController
     else
       @survey = UsabilitySurvey.create(survey_params)
     end
-    debugger
+
     save_survey
   end
 
@@ -47,6 +47,7 @@ class UsabilitySurveysController < ApplicationController
     UsabilitySurvey.transaction do
 
       logger.debug "Begin transaction"
+      logger.debug "Survey = #{@survey.pretty_inspect}"
       if @survey.save
 
       feature_params.each do |feature_id, value|
