@@ -36,7 +36,7 @@ class UsabilitySurveysController < ApplicationController
     else
       @survey = UsabilitySurvey.create(survey_params)
     end
-
+    debugger
     save_survey
   end
 
@@ -45,10 +45,10 @@ class UsabilitySurveysController < ApplicationController
 
   def save_survey
     # Feature Requests and Usability Survey should all save properly
-    ActiveRecord::Base.transaction do
+    UsabilitySurvey.transaction do
 
       logger.debug "Begin transaction"
-      @survey.save
+      if @survey.save
 
       feature_params.each do |feature_id, value|
         if value == 'true'
@@ -60,7 +60,7 @@ class UsabilitySurveysController < ApplicationController
           logger.debug "Destroying or missing #{feature_id}, #{value}"
         end
       end
-
+      end
     end
 
     if @survey.persisted?
