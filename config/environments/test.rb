@@ -33,4 +33,7 @@ ChartupRails::Application.configure do
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
+
+  config.lilypond_path = '/usr/local/bin/lilypond'
+
 end
