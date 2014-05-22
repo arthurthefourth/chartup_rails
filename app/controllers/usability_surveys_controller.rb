@@ -23,8 +23,9 @@ class UsabilitySurveysController < ApplicationController
       @survey = current_user.latest_survey
       @survey.assign_attributes(survey_params)
     else
-      @survey = UsabilitySurvey.create(survey_params)
+      @survey = UsabilitySurvey.new(survey_params)
     end
+    @survey.app_version = Rails.application.version
     save_survey
   end
 
@@ -33,9 +34,9 @@ class UsabilitySurveysController < ApplicationController
     if current_user
       @survey = current_user.usability_surveys.build(survey_params)
     else
-      @survey = UsabilitySurvey.create(survey_params)
+      @survey = UsabilitySurvey.new(survey_params)
     end
-
+    @survey.app_version = Rails.application.version
     save_survey
   end
 
@@ -72,7 +73,7 @@ class UsabilitySurveysController < ApplicationController
   end
 
   def survey_params
-    params.require(:usability_survey).permit(:useful_now, :useful_eventually)
+    params.require(:usability_survey).permit(:useful_now, :useful_eventually, :other_feature1, :other_feature2, :other_feature3, :comment)
   end
 
   def feature_params

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140522010843) do
+ActiveRecord::Schema.define(version: 20140522210927) do
 
   create_table "charts", force: true do |t|
     t.text     "chartup"
@@ -59,6 +59,10 @@ ActiveRecord::Schema.define(version: 20140522010843) do
     t.string   "app_version"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "other_feature1"
+    t.string   "other_feature2"
+    t.string   "other_feature3"
+    t.text     "comment"
   end
 
   add_index "usability_surveys", ["user_id"], name: "index_usability_surveys_on_user_id"

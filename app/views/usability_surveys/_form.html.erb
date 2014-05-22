@@ -36,24 +36,45 @@ Thanks for trying out Chartup! I'd love to get your answers to a few questions t
 
 	<li><h3>What extra features would you need to make it useful?</h3>
 		<% @features.group_by(&:category_description).each do |category, grouped_features| %>
-		<h4><%= category %></h4>
-		<% grouped_features.each do |feature| %>
-			<% checked = !!@requests.find_by(feature_id: feature.id) %>
+			<h4><%= category %></h4>
+			<% grouped_features.each do |feature| %>
+				<% checked = !!@requests.find_by(feature_id: feature.id) %>
 
-			<div class="form-group btn-group" data-toggle="buttons">
-			<%= hidden_field_tag "usability_survey[features][#{feature.id}]", false, id: "usability_survey_features_#{feature.id}" %>
-			<%= f.label "features_#{feature.id}", 
-			class: "btn btn-default form-control #{'active' if checked}" do %>
-				<%= check_box_tag "usability_survey[features][#{feature.id}]", true, checked, id: "usability_survey_features_#{feature.id}" %><%= feature.name %>
+				<div class="form-group btn-group" data-toggle="buttons">
+				<%= hidden_field_tag "usability_survey[features][#{feature.id}]", false, id: "usability_survey_features_#{feature.id}" %>
+				<%= f.label "features_#{feature.id}", 
+				class: "btn btn-default form-control #{'active' if checked}" do %>
+					<%= check_box_tag "usability_survey[features][#{feature.id}]", true, checked, id: "usability_survey_features_#{feature.id}" %><%= feature.name %>
+				<% end %>
+				</div>
 			<% end %>
-			</div>
 		<% end %>
-		<% end %>
+		<h4>Other</h4>
+		<div class="form-group">
+			<%= f.label :other_feature1, class: 'sr-only' %>
+			<%= f.text_field :other_feature1, class: 'form-control' %>
+		</div>
+		<div class='form-group'>
+			<%= f.label :other_feature2, class: 'sr-only' %>
+			<%= f.text_field :other_feature2, class: 'form-control' %>
+		</div>
+		<div class='form-group'>
+			<%= f.label :other_feature3, class: 'sr-only' %>
+			<%= f.text_field :other_feature3, class: 'form-control' %>
+		</div>
 
+	</li>
+	<li>
+		<h3>Anything else?</h3>
+		<h4>I'd love to hear any other feedback, comments, requests, ideas, etc. Thanks!</h4>
+		<div class='form-group'>
+			<%= f.label :comment, class: 'sr-only' %>
+			<%= f.text_area :comment, size: '60x10', class: 'form-control' %>
+		</div>
 	</li>
 	<li style="list-style-type: none">
 		<div class="form-group" style="display:block; margin-top: 10px;">
-			<%= f.submit 'Submit', class: 'btn' %>
+			<%= f.submit 'Submit', class: 'btn form-control' %>
 		</div>
 	</li>
 	</ol>
