@@ -28,8 +28,8 @@ class Chart < ActiveRecord::Base
 
 
   def chartup_without_title
-    if chartup
-      chartup.lines.reject {|line| is_title(line)}.map! {|line| line.chomp }.compact.join("\n")
+    if self.chartup
+      self.chartup.lines.reject {|line| is_title(line)}.map! {|line| line.chomp }.compact.join("\n")
     else
       ''
     end

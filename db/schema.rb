@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140512014937) do
+ActiveRecord::Schema.define(version: 20140522010843) do
 
   create_table "charts", force: true do |t|
     t.text     "chartup"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20140512014937) do
     t.datetime "updated_at"
     t.string   "title"
     t.integer  "user_id"
+    t.string   "png_path"
   end
 
   add_index "charts", ["user_id"], name: "index_charts_on_user_id"

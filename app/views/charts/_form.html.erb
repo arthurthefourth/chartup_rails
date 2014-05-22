@@ -18,6 +18,7 @@
 					<%= f.label :chartup, 'Chart' %>
 					<%= f.text_area :chartup, size: '60x20', class: 'form-control', value: @chart.chartup_without_title %>
 				</div>
+				<%= f.hidden_field :png_path %>
 				<div class='form-group submit-button-container' >
 					<%= f.submit 'Preview', class: 'btn', id: 'preview-button', data: { "loading-text" => 'Loading...' } %>
 					<%= f.submit 'Save', class: 'btn', id: 'save-button' %>

@@ -23,6 +23,12 @@ $(document).ready(function() {
 		var formChanged = false;
 		var preventAutosave = false;
 
+		// if previewImageCached {
+		// 	previewImage.attr('src', localStorage.preview_URL);
+		// }
+
+		// var previewImageCached = false;
+
 		// Autosaving only occurs if the form is changed
 		$('.chart_form .form-control').on('change keyup', function() { 
 			formChanged = true; 
@@ -35,7 +41,11 @@ $(document).ready(function() {
 				localStorage.chart_title = $('#chart_title').val();
 				localStorage.chart_chartup = $('#chart_chartup').val();
 				localStorage.chart_url = location.href;
-				console.log("Autosave complete.")
+				preview_url = $('#main-preview-image').attr('src');
+				if (preview_url) {
+					localStorage.preview_url = preview_url;
+				}
+				console.log("Autosave complete.");
 				formChanged = false;
 			}
 		};
@@ -57,12 +67,14 @@ $(document).ready(function() {
 			localStorage.removeItem('chart_title');
 			localStorage.removeItem('chart_chartup');
 			localStorage.removeItem('chart_url');
+			localStorage.removeItem('preview_url');
 		};
 
 		$('.chart_form').submit(function(e) {
 			e.preventDefault();
 			deleteAutosave();
 			preventAutosave = true;
+			$('#chart_png_path').val($('#main-preview-image').attr('src'));
 			this.submit(); // Submit form directly to avoid triggering jQuery handler
 		});
 
@@ -70,6 +82,10 @@ $(document).ready(function() {
 		var loadFromAutosave = function() {
 			$('#chart_title').val(localStorage.chart_title);
 			$('#chart_chartup').val(localStorage.chart_chartup);
+			if (localStorage.preview_url) {
+				$('#main-preview-image').attr('src', localStorage.preview_url);
+			}
+
 		};
 
 		var autosaveDataExists = function() {
@@ -82,10 +98,11 @@ $(document).ready(function() {
 				bootbox.confirm("You have unsaved changes to the chart \"" + localStorage.chart_title + "\". " +
 					"Are you sure you want to scrap them, and work on " + newTitle + " instead?", 
 					function(result) {
-
+						// Scrap chart
 						if (result) {
 							deleteAutosave();
 						}
+						// Go back to unsaved chart
 						else {
 							if (localStorage.chart_url) {
 								localStorage.forceLoadFromAutosave = true;
@@ -102,6 +119,8 @@ $(document).ready(function() {
 			localStorage.removeItem('forceLoadFromAutosave');
 		}
 		else {
+			$('#main-preview-image').attr('src', $('#chart_png_path').val());
+
 			switch ($('#hidden-action-tag').html()) {
 				case "home":
 					if (localStorage.chart_url) {

@@ -89,7 +89,7 @@ class ChartsController < ApplicationController
 
   private
   def chart_params
-    params.require(:chart).permit(:title, :chartup)
+    params.require(:chart).permit(:title, :chartup, :png_path)
   end
 
   def correct_user

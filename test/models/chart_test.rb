@@ -25,6 +25,11 @@ class ChartTest < ActiveSupport::TestCase
     assert_no_match "title: Title2", c.chartup
   end
 
+  test 'chartup_without_title returns chartup without the title' do
+    c = Chart.create(title: 'Title1', chartup: "title: title2\nAm")
+    assert_equal "Am", c.chartup_without_title
+  end
+  
   test 'output_lilypond creates a pdf' do
     c = charts(:basic)
     path = c.output_lilypond(:pdf)
