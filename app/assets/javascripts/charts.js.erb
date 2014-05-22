@@ -147,6 +147,7 @@ $(document).ready(function() {
 			// var oldImage = previewImage.attr('src');
 			// previewImage.attr('src', "<%= asset_path 'loading.gif' %>" );
 			$('#preview-button').button('loading');
+			clearErrors();
 			$.ajax({
 				type: "POST",
 				url: "/charts/preview",
@@ -160,7 +161,6 @@ $(document).ready(function() {
 					console.log(error);
 					console.log(xhr.responseJSON);
 					errors = xhr.responseJSON.error;
-					$('#form-errors').html('');
 					for (var i = 0; i < errors.length; i++) {
 						$('#form-errors').prepend("<p class='alert alert-danger'>" + errors[i] + "</p>");
 					}
@@ -172,11 +172,16 @@ $(document).ready(function() {
 		// Submit data to download action.
 		$('#pdf-button').click ( function(e) {
 			e.preventDefault();
+			clearErrors();
 			var form = $('.chart_form');
 			var oldAction = form.attr('action');
 			form.attr('action', "/charts/download").submit();
 			form.attr('action', oldAction);
 		});
 
+		/* OTHER */
+		var clearErrors = function() {
+			$('.alert').remove();
+		};
 	}
 });
