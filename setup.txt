@@ -79,3 +79,7 @@ apt-get update
 apt-get install newrelic-sysmond
 nrsysmond-config --set license_key=$NEW_RELIC_LICENSE_KEY
 /etc/init.d/newrelic-sysmond start
+
+#DB Backup
+gem install backup
+backup generate:model --trigger production_backup --archives --storages="s3" --encryptor="openssl" --compressor="gzip"
