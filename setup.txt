@@ -1,6 +1,8 @@
 # Some notes on deploying a new Chartup site
-# Should work mostly on fresh DigitalOcean Ubuntu 12.04.3 x64 droplet
-# Be careful - still needs to be edited (and automated)
+# Should work on fresh DigitalOcean Ubuntu 12.04.3 x64 droplet or hashicorp/x64 Vagrant box
+# "##" signifies actions that should be taken away from command line
+# CAUTION: DO NOT RUN THIS FILE AS A SCRIPT
+
 sudo apt-get update
 sudo apt-get install curl nodejs libpq-dev git emacs23-nox libcurl4-openssl-dev
 
@@ -23,10 +25,12 @@ rvm use ruby-2.1.1@rails4.1 --create
 gem install rails --version=4.1
 
 #Set up Chartup project
-ssh-keygen -t rsa -C "arthur.lewis@gmail.com"
+ssh-keygen -t rsa -C $EMAIL_ADDRESS
 eval "$(ssh-agent)"
 ssh-add ~/.ssh/id_rsa
-# (Make sure to add SSH key to Github)
+
+cd $YOUR_DEPLOYMENT_PATH
+## Make sure to add SSH key to Github
 git clone git@github.com:arthurthefourth/chartup_rails.git
 cd chartup_rails
 bundle install
@@ -34,13 +38,14 @@ bundle install
 #Lilypond
 curl -O http://download.linuxaudio.org/lilypond/binaries/linux-64/lilypond-2.18.2-1.linux-64.sh
 sudo sh lilypond-2.18.2-1.linux-64.sh
+rm lilypond-2.18.2-1.linux-64.sh
 
 # Nginx and Passenger
 
 # If machine has low RAM
-	# sudo dd if=/dev/zero of=/swap bs=1M count=1024
-	# sudo mkswap /swap
-	# sudo swapon /swap
+	sudo dd if=/dev/zero of=/swap bs=1M count=1024
+	sudo mkswap /swap
+	sudo swapon /swap
 
 gem install passenger
 rvmsudo passenger-install-nginx-module
@@ -52,20 +57,20 @@ wget -O init-deb.sh http://library.linode.com/assets/660-init-deb.sh
 sudo mv init-deb.sh /etc/init.d/nginx
 sudo chmod +x /etc/init.d/nginx
 
+#Configure nginx in /opt/nginx/nginx.conf
+	server { 
+	listen 80; 
+	server_name example.com; 
+	passenger_enabled on; 
+	root /path/to/chartup_rails/public; 
+	}
+
 # Add nginx to the system startup
 sudo /usr/sbin/update-rc.d -f nginx defaults
 sudo service nginx start 
 
-#Configure nginx in /opt/nginx/nginx.conf
-	# server { 
-	# listen 80; 
-	# server_name example.com; 
-	# passenger_enabled on; 
-	# root /path/to/chartup_rails/public; 
-	# }
-
 mkdir downloads
-# Deploy secrets.yml somehow
+## Deploy secrets.yml somehow
 
 #In production
 RAILS_ENV=production rake db:create db:schema:load
@@ -80,6 +85,17 @@ apt-get install newrelic-sysmond
 nrsysmond-config --set license_key=$NEW_RELIC_LICENSE_KEY
 /etc/init.d/newrelic-sysmond start
 
-#DB Backup
+#Production DB Backup
 gem install backup
 backup generate:model --trigger production_backup --archives --storages="s3" --encryptor="openssl" --compressor="gzip"
+
+## Deploy ~/Backup/models/production_backup.rb
+
+#Schedule backups
+gem install whenever
+cd ~
+mkdir config # required by wheneverize
+wheneverize
+
+## Edit/deploy ~/config/schedule.rb
+whenever --update-crontab
