@@ -1,14 +1,14 @@
 ChartupRails::Application.routes.draw do
 
   resources :feature_requests, only: [:create, :destroy]
+
   resources :usability_surveys, path: 'surveys'
   get 'survey', to: 'usability_surveys#new'
-  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
 
+  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
   devise_scope :user do
     delete 'sign_out', to: 'devise/sessions#destroy'
   end
-
 
   root 'charts#home'
   # These routes have to come first, or preview will be seen as an id
@@ -20,6 +20,9 @@ ChartupRails::Application.routes.draw do
 
   get 'downloads/:filename', to: 'charts#send_png', as: :send_png
 
+  match '/404', to: 'errors#not_found', via: :all
+  match '/500', to: 'errors#internal_error', via: :all
+  match '/422', to: 'errors#unprocessable', via: :all
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

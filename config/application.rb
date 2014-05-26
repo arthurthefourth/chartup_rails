@@ -21,5 +21,7 @@ module ChartupRails
     # config.i18n.default_locale = :de
     config.assets.paths << Rails.root.join('vendor', 'assets', 'fonts')
     config.time_zone = 'Eastern Time (US & Canada)'
+    config.exceptions_app = self.routes
+
   end
 end
