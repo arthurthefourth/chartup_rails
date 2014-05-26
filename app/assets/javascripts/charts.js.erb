@@ -23,12 +23,6 @@ $(document).ready(function() {
 		var formChanged = false;
 		var preventAutosave = false;
 
-		// if previewImageCached {
-		// 	previewImage.attr('src', localStorage.preview_URL);
-		// }
-
-		// var previewImageCached = false;
-
 		// Autosaving only occurs if the form is changed
 		$('.chart_form .form-control').on('change keyup', function() { 
 			formChanged = true; 
@@ -37,7 +31,7 @@ $(document).ready(function() {
 		//Autosave every minute and a half
 		var autosave = function() {
 			if (formChanged) {
-				console.log("Autosaving...");
+				// console.log("Autosaving...");
 				localStorage.chart_title = $('#chart_title').val();
 				localStorage.chart_chartup = $('#chart_chartup').val();
 				localStorage.chart_url = location.href;
@@ -45,7 +39,7 @@ $(document).ready(function() {
 				if (preview_url) {
 					localStorage.preview_url = preview_url;
 				}
-				console.log("Autosave complete.");
+				// console.log("Autosave complete.");
 				formChanged = false;
 			}
 		};
@@ -60,9 +54,6 @@ $(document).ready(function() {
 			}
 		});
 
-
-		// Clean out autosaves when we save to database
-		// TODO: This should only happen on successful save!
 		var deleteAutosave = function() {
 			localStorage.removeItem('chart_title');
 			localStorage.removeItem('chart_chartup');
@@ -70,10 +61,9 @@ $(document).ready(function() {
 			localStorage.removeItem('preview_url');
 		};
 
+		// On Save, make sure preview image URL is saved to server.
 		$('.chart_form').submit(function(e) {
 			e.preventDefault();
-			deleteAutosave();
-			preventAutosave = true;
 			$('#chart_png_path').val($('#main-preview-image').attr('src'));
 			this.submit(); // Submit form directly to avoid triggering jQuery handler
 		});
@@ -83,7 +73,9 @@ $(document).ready(function() {
 			$('#chart_title').val(localStorage.chart_title);
 			$('#chart_chartup').val(localStorage.chart_chartup);
 			if (localStorage.preview_url) {
-				$('#main-preview-image').attr('src', localStorage.preview_url);
+				preview_image = $('#main-preview-image');
+				preview_image.attr('src', localStorage.preview_url);
+				preview_image.show();
 			}
 
 		};
@@ -105,8 +97,7 @@ $(document).ready(function() {
 						// Go back to unsaved chart
 						else {
 							if (localStorage.chart_url) {
-								localStorage.forceLoadFromAutosave = true;
-								location.href = localStorage.chart_url;
+								reloadWithAutosave();
 							}
 						}
 					}
@@ -114,26 +105,52 @@ $(document).ready(function() {
 			}
 		};
 
+		var reloadWithAutosave = function() {
+			localStorage.forceLoadFromAutosave = true;
+			location.href = localStorage.chart_url;			
+		};
+
+		/* INITIAL PAGE LOAD
+		==============================*/
+
+		// If this is a reloadWithAutosave, load the autosave data.
 		if (localStorage.forceLoadFromAutosave) {
 			loadFromAutosave();
 			localStorage.removeItem('forceLoadFromAutosave');
 		}
 		else {
-			$('#main-preview-image').attr('src', $('#chart_png_path').val());
 
-			switch ($('#hidden-action-tag').html()) {
-				case "home":
-					if (localStorage.chart_url) {
-						localStorage.forceLoadFromAutosave = true;
-						location.href = localStorage.chart_url;
-					}
-				break;
-				case "new":
-					deleteOrLoadAutosave("a new chart");
-				break;
-				case "edit":
-					deleteOrLoadAutosave('"' + $('#chart_title').val() + '"');			 
-				break;
+			// Load preview image passed up from server
+			preview_url = $('#chart_png_path').val();
+			if (preview_url) {
+				$('#main-preview-image').attr('src', preview_url);
+			}
+
+			// If we just saved successfully, clear the autosave data
+			if ( $('#chart-saved').length ) {
+				deleteAutosave();
+				console.log('Found saved chart - deleting autosave');
+				$('#chart-saved').remove();
+			}
+
+			else {
+				/* If we got here via Home link, load the autosaved chart.
+				/* Do this by reloading the page with the right form (new or edit) and URL.
+				/* If we got here by New or Edit, make sure the user wants to ditch the autosave.
+				*/
+				switch ($('#hidden-action-tag').html()) {
+					case "home":
+						if (localStorage.chart_url) {
+							reloadWithAutosave();
+						}
+					break;
+					case "new":
+						deleteOrLoadAutosave("a new chart");
+					break;
+					case "edit":
+						deleteOrLoadAutosave('"' + $('#chart_title').val() + '"');			 
+					break;
+				}
 			}
 		}
 
@@ -155,6 +172,7 @@ $(document).ready(function() {
 				// dataType: 'text',
 				success: function(data, status, xhr) {
 					previewImage.attr('src', xhr.responseText);
+					previewImage.show();
 					$('#preview-button').button('reset');
 				},
 				error: function(xhr, status, error) {

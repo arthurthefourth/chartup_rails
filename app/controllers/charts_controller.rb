@@ -34,6 +34,7 @@ class ChartsController < ApplicationController
     @chart = current_user.charts.build(chart_params)
     if @chart.save
       flash[:notice] = 'Chart saved.'
+      flash[:chart_saved] = true
       redirect_to edit_chart_path(@chart)
     else
       render :edit    
@@ -43,6 +44,7 @@ class ChartsController < ApplicationController
   def update
     if @chart.update_attributes(chart_params)
       flash[:notice] = 'Chart updated.'
+      flash[:chart_saved] = true
       redirect_to edit_chart_path(@chart)
     else
       render :edit
@@ -96,4 +98,5 @@ class ChartsController < ApplicationController
     @chart = current_user.charts.find_by(id: params[:id])
     redirect_to root_url if @chart.nil?
   end
+
 end

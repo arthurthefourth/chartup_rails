@@ -1,67 +1,85 @@
 <h2>Usefulness Survey</h2>
 
-Thanks for trying out Chartup! I'd love to get your answers to a few questions to help make Chartup more useful for you. Don't worry; it's multiple choice!
+<p>Thanks for trying out Chartup! I'd love to get your answers to a few questions to help make Chartup more useful for you. Don't worry; it's multiple choice!</p>
 
-<%= form_for @survey, html: {class: 'form-inline'} do |f| %>
+<%= form_for @survey, html: {class: 'form-inline survey-form'} do |f| %>
 	<% @survey.errors.full_messages.each do |msg| %>
 		<p class='alert alert-danger'><%= msg %></p>
 	<% end %>
 	<ol>
-
-	<li><h3>Is Chartup useful to you right now, the way it currently works?</h3>
-	<div class="form-group btn-group" data-toggle="buttons">
-		<% checked = !!@survey.useful_now %>
-		<%= f.hidden_field :useful_now, value: 'false' %>
-	    <%= f.label:useful_now, class: "btn btn-default form-control #{'active' if checked}", value: 'true' do %>
-	    	<%= "#{f.radio_button(:useful_now, true)} Useful".html_safe %>
-	 	<% end %>
-	    <%= f.label :useful_now, class: "btn btn-default form-control #{'active' unless checked}", value: 'false' do %>
-	    	<%= "#{f.radio_button(:useful_now, false)} Not So Useful".html_safe %>
-    	<% end %>
-	</div>
+	<li>
+		<h3>Is Chartup useful to you right now, the way it currently works?</h3>
+		<div class="form-group btn-group" data-toggle="buttons">
+			<% checked = !!@survey.useful_now %>
+			<%= f.hidden_field :useful_now, value: 'false' %>
+		    <%= f.label:useful_now, class: "btn btn-default form-control #{'active' if checked}", value: 'true' do %>
+		    	<%= "#{f.radio_button(:useful_now, true)} Useful".html_safe %>
+		 	<% end %>
+		    <%= f.label :useful_now, class: "btn btn-default form-control #{'active' unless checked}", value: 'false' do %>
+		    	<%= "#{f.radio_button(:useful_now, false)} Not So Useful".html_safe %>
+	    	<% end %>
+		</div>
 	</li>
 
-	<li><h3>Could you see it being useful eventually if more features were added?</h3> 
-	<div class="form-group btn-group" data-toggle="buttons">
-		<% checked = !!@survey.useful_eventually %>
-		<%= f.hidden_field :useful_eventually, value: 'false' %>
-	    <%= f.label :useful_eventually, class: "btn btn-default form-control #{'active' if checked}", value: 'true' do %>
-	    	<%= "#{f.radio_button(:useful_eventually, true)} Useful Eventually".html_safe %>
-	 	<% end %>
-	    <%= f.label :useful_eventually, class: "btn btn-default form-control #{'active' unless checked}", value: 'false' do %>
-	    	<%= "#{f.radio_button(:useful_eventually, false)} Nope, Just Not My Thing".html_safe %>
-    	<% end %>
-	</div>
+	<li>
+		<h3>Could you see it being useful eventually if more features were added?</h3> 
+		<div class="form-group btn-group" data-toggle="buttons">
+			<% checked = !!@survey.useful_eventually %>
+			<%= f.hidden_field :useful_eventually, value: 'false' %>
+		    <%= f.label :useful_eventually, class: "btn btn-default form-control #{'active' if checked}", value: 'true' do %>
+		    	<%= "#{f.radio_button(:useful_eventually, true)} Useful Eventually".html_safe %>
+		 	<% end %>
+		    <%= f.label :useful_eventually, class: "btn btn-default form-control #{'active' unless checked}", value: 'false' do %>
+		    	<%= "#{f.radio_button(:useful_eventually, false)} Nope, Just Not My Thing".html_safe %>
+	    	<% end %>
+		</div>
 	</li>
 
-	<li><h3>What extra features would you need to make it useful?</h3>
+	<li>
+		<h3>What extra features would you need to make it useful?</h3>
+		<div class='table-responsive'>
+		<table class='table'>
 		<% @features.group_by(&:category_description).each do |category, grouped_features| %>
-			<h4><%= category %></h4>
+		<tr>
+			<th><%= "#{category}: " %></th>
 			<% grouped_features.each do |feature| %>
+				<td>
 				<% checked = !!@requests.find_by(feature_id: feature.id) %>
 
-				<div class="form-group btn-group" data-toggle="buttons">
+				<div class="form-group btn-group btn-group-justified survey-feature-grid" data-toggle="buttons">
 				<%= hidden_field_tag "usability_survey[features][#{feature.id}]", false, id: "usability_survey_features_#{feature.id}" %>
 				<%= f.label "features_#{feature.id}", 
-				class: "btn btn-default form-control #{'active' if checked}" do %>
+				class: "btn btn-default form-control #{'active' if checked} survey-feature-button" do %>
 					<%= check_box_tag "usability_survey[features][#{feature.id}]", true, checked, id: "usability_survey_features_#{feature.id}" %><%= feature.name %>
+				</td>
 				<% end %>
 				</div>
 			<% end %>
+		</tr>
 		<% end %>
-		<h4>Other</h4>
-		<div class="form-group">
+		<tr>
+		<th>Other</th>
+		<td>
+		<div class="form-group other-feature-group">
 			<%= f.label :other_feature1, class: 'sr-only' %>
-			<%= f.text_field :other_feature1, class: 'form-control' %>
+			<%= f.text_field :other_feature1, class: 'form-control other-feature' %>
 		</div>
-		<div class='form-group'>
+		</td>
+		<td>
+		<div class='form-group other-feature-group'>
 			<%= f.label :other_feature2, class: 'sr-only' %>
-			<%= f.text_field :other_feature2, class: 'form-control' %>
+			<%= f.text_field :other_feature2, class: 'form-control other-feature' %>
 		</div>
-		<div class='form-group'>
+		</td>
+		<td>
+		<div class='form-group other-feature-group'>
 			<%= f.label :other_feature3, class: 'sr-only' %>
-			<%= f.text_field :other_feature3, class: 'form-control' %>
+			<%= f.text_field :other_feature3, class: 'form-control other-feature' %>
 		</div>
+		</td>
+		</tr>
+	</table>
+</div>
 
 	</li>
 	<li>
