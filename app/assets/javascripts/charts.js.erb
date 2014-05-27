@@ -124,12 +124,12 @@ $(document).ready(function() {
 			preview_url = $('#chart_png_path').val();
 			if (preview_url) {
 				$('#main-preview-image').attr('src', preview_url);
+				$('#main-preview-image').show();
 			}
 
 			// If we just saved successfully, clear the autosave data
 			if ( $('#chart-saved').length ) {
 				deleteAutosave();
-				console.log('Found saved chart - deleting autosave');
 				$('#chart-saved').remove();
 			}
 
