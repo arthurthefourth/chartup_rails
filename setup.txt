@@ -99,3 +99,29 @@ wheneverize
 
 ## Edit/deploy ~/config/schedule.rb
 whenever --update-crontab
+
+#SSL (as root)
+cd /opt/nginx/
+mkdir ssl
+openssl genrsa -des3 -out server.key 2048
+openssl req -new -key server.key -out server.csr
+cp server.key server.key.org
+openssl rsa -in server.key.org -out server.key
+
+## Upload server.csr to CA and procure chain of CRT's
+cat $SITE_CRT $OTHER_CRT $OTHER_CRT_2 > bundle.crt
+mv bundle.crt /opt/nginx/ssl/
+
+## Edit /opt/nginx/nginx.conf/
+
+    server {
+        listen       443;
+        ssl on;
+        server_name example.com;
+        passenger_enabled on;
+        root              /path/to/chartup_rails/public;
+        rails_env         production;
+        ssl_certificate   /opt/nginx/ssl/bundle.crt;
+        ssl_certificate_key /opt/nginx/ssl/server.key;
+        }
+    }
