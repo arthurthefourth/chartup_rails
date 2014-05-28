@@ -10,6 +10,7 @@ gem 'devise', '3.2.4'
 #gem 'chartup', '0.0.2'
 gem 'omniauth-facebook', '1.6.0'
 gem 'newrelic_rpm'
+gem 'activeadmin', github: 'gregbell/active_admin'
 
 group :development, :test do 
   gem 'sqlite3', '1.3.8'
