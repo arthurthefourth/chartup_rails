@@ -22,7 +22,7 @@
 						</a>
 					</li>
 
-					<% if signed_in? %>
+					<% if user_signed_in? %>
 						<li><%= link_to "New Chart", new_chart_path, id: 'new-chart-button' %></li>
 						<li><%= link_to charts_path do %>
 							My Charts <span class="badge"><%= current_user.charts.count %></span>
