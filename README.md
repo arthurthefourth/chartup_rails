@@ -4,7 +4,7 @@ Chartup is a simple intuitive language for writing basic chord charts, inspired 
 
 This site is a basic editor for Chartup documents, with embedded preview and PDF downloads. User authentication is implemented with [Devise][3]. The design is built using a [Bootswatch][4] template for Bootstrap 3.0.
 
-Much of the chart-generating magic is embedded in the Chartup gem, which turns a Chartup chart into a Lilypond document. The code here builds out a user system for saving and editing charts, with autosave functionality implemented in Javascript. It uses Lilypond to render generated documents and serves them as PNG's and PDF's.
+Much of the chart-generating magic is embedded in the Chartup library (soon to be made into a gem), which turns a Chartup chart into a Lilypond document. The code here builds out a user system for saving and editing charts, with autosave functionality implemented in Javascript. It uses Lilypond to render generated documents and serves them as PNG's and PDF's.
 
 TODO
 =========
